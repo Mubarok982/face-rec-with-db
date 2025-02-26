@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition</title>
+</head>
+<body>
+    <h2>Deteksi Wajah dengan Label</h2>
+    <img src="{{ url_for('video_feed') }}" width="640" height="480">
+
+    <h3>Daftarkan Wajah</h3>
+    <form id="registerForm">
+        <input type="text" id="name" placeholder="Masukkan nama">
+        <button type="submit">Simpan Wajah</button>
+    </form>
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let name = document.getElementById("name").value;
+
+            let formData = new FormData();
+            formData.append("name", name);
+
+            fetch('/register_face', {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>

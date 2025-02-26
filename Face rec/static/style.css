@@ -1,0 +1,29 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+video {
+    width: 60%;
+    border: 2px solid black;
+    margin-bottom: 10px;
+}
+
+canvas {
+    display: none;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+img {
+    max-width: 60%;
+    margin-top: 20px;
+    border: 2px solid black;
+}
