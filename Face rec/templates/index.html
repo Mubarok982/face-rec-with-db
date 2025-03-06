@@ -4,33 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Face Recognition</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h2>Deteksi Wajah dengan Label</h2>
-    <img src="{{ url_for('video_feed') }}" width="640" height="480">
+<body class="bg-light text-center">
+    <div class="container py-5">
+        <h2 class="text-primary">Deteksi Wajah dengan Kamera Laptop</h2>
+        
+        <!-- Stream Video dari Kamera -->
+        <div class="d-flex justify-content-center">
+            <img src="{{ url_for('video_feed') }}" alt="Video Stream" class="img-fluid rounded shadow">
+        </div>
+        
+        <!-- Form untuk mendaftarkan wajah -->
+        <div class="mt-4">
+            <h3 class="text-secondary">Daftarkan Wajah</h3>
+            <form id="registerForm" action="/register_face" method="post" class="d-flex justify-content-center gap-2">
+                <input type="text" id="name" name="name" class="form-control w-25" placeholder="Masukkan nama" required>
+                <button type="submit" class="btn btn-primary">Simpan Wajah</button>
+            </form>
+        </div>
 
-    <h3>Daftarkan Wajah</h3>
-    <form id="registerForm">
-        <input type="text" id="name" placeholder="Masukkan nama">
-        <button type="submit">Simpan Wajah</button>
-    </form>
+        <!-- Tombol & Container untuk melihat wajah tersimpan -->
+        <div class="mt-4">
+            <button class="btn btn-info" onclick="loadSavedFaces()">Lihat Wajah Tersimpan</button>
+            <div id="savedFaces" class="mt-3 d-flex flex-wrap justify-content-center gap-3"></div>
+        </div>
+    </div>
 
     <script>
         document.getElementById("registerForm").addEventListener("submit", function(event) {
             event.preventDefault();
-            let name = document.getElementById("name").value;
-
-            let formData = new FormData();
-            formData.append("name", name);
-
-            fetch('/register_face', {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => alert(data.message))
-            .catch(error => console.error("Error:", error));
         });
+
+        async function loadSavedFaces() {
+            try {
+                let response = await fetch('/get_saved_faces');
+                let data = await response.json();
+                let container = document.getElementById("savedFaces");
+                container.innerHTML = "";
+                data.forEach(face => {
+                    let img = document.createElement("img");
+                    img.src = "data:image/jpeg;base64," + face.image;
+                    img.classList.add("img-thumbnail", "rounded", "shadow-sm");
+                    container.appendChild(img);
+                });
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
